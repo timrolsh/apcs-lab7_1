@@ -1,11 +1,11 @@
 package pq;
 
-import java.util.Random;
-import java.util.NoSuchElementException;
 import java.util.Arrays;
+import java.util.NoSuchElementException;
+import java.util.Random;
 
 public class BCAMinPQTest {
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         BCAMinPQ<Integer> pq = new BCAMinPQ<>();
 
         pq.enqueue(15);
@@ -15,7 +15,7 @@ public class BCAMinPQTest {
         pq.enqueue(98);
         pq.enqueue(-16);
 
-        int[] initialHeap = { 0, -16, 18, 1, 41, 98, 15 };
+        int[] initialHeap = {0, -16, 18, 1, 41, 98, 15};
         for (int i = 1; i <= 6; i++) {
             try {
                 if (pq.get(i) == initialHeap[i])
@@ -26,6 +26,7 @@ public class BCAMinPQTest {
                 System.out.println("Failed 0." + i + " (Exception)");
             }
         }
+
 
         if (pq.peek().equals(-16))
             System.out.println("Passed 1a (peek)");
@@ -47,6 +48,7 @@ public class BCAMinPQTest {
         pq.enqueue(42);
         pq.enqueue(1234);
 
+
         if (pq.dequeue().equals(15))
             System.out.println("Passed 3");
         else
@@ -57,12 +59,13 @@ public class BCAMinPQTest {
         else
             System.out.println("Failed 4 (size)");
 
+
         if (!pq.isEmpty())
             System.out.println("Passed 5 (isEmpty)");
         else
             System.out.println("Failed 5 (isEmpty)");
 
-        int[] remaining = { 18, 41, 42, 87, 98, 102, 1234 };
+        int[] remaining = {18, 41, 42, 87, 98, 102, 1234};
         for (int i = 0; i < 7; i++) {
             try {
                 if (pq.dequeue() == remaining[i])
@@ -86,7 +89,7 @@ public class BCAMinPQTest {
             System.out.println("Passed 8 (dequeue Exception)");
         }
 
-        // Stress Test - HeapSort
+        //Stress Test - HeapSort
         Random rand = new Random(1000);
         int[] arr = new int[1000];
         for (int i = 0; i < 1000; i++) {

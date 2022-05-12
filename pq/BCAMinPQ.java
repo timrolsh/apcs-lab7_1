@@ -18,7 +18,7 @@ public class BCAMinPQ<E extends Comparable<E>> implements BCAQueue<E> {
      */
     private int leftChildOf(int i) {
         return 2 * i;
-        
+
     }
 
     /**
@@ -52,12 +52,15 @@ public class BCAMinPQ<E extends Comparable<E>> implements BCAQueue<E> {
      */
     private void pushUp(int i) {
         // checks that i is not root already and that its parent is greater than itself
-        while ((i != 1)  && (heap.get(parentOf(i)).compareTo(heap.get(i))) > 0) {
+        while ((i != 1) && (heap.get(parentOf(i)).compareTo(heap.get(i))) > 0) {
             swap(i, parentOf(i));
+            i /= 2;
         }
     }
 
-    /** Adds a new element to the the queue. */
+    /**
+     * Adds a new element to the the queue.
+     */
     public void enqueue(E o) {
         heap.add(o);
         pushUp(heap.size() - 1);
@@ -82,36 +85,47 @@ public class BCAMinPQ<E extends Comparable<E>> implements BCAQueue<E> {
      * is the only element out of place.
      */
     private void pushDown(int i) {
-        while (true /* TODO continue as long as i has at least 1 child */) {
-            /* TODO pick the smaller child (there might only be one!) */
+        while (((rightChildOf(i) < heap.size()) || (leftChildOf(i) < heap.size()))) {
+            // left not null right null
+            if ((rightChildOf(i) >= heap.size()) && (heap.get(leftChildOf(i)).compareTo(heap.get(i)) < 0)) {
+                int temp = leftChildOf(i);
+                swap(i, leftChildOf(i));
+                i = temp;
+            }
+            // both not null
+            else {
 
-            if (i < rightChildOf(i) && i < leftChildOf(i)) {
+                int temp;
+                if (heap.get(rightChildOf(i)).compareTo(heap.get(leftChildOf(i))) < 0) {
+                    temp = rightChildOf(i);
+                    swap(i, rightChildOf(i));
+                } else {
+                    temp = leftChildOf(i);
+                    swap(i, leftChildOf(i));
+
+                }
+                i = temp;
+            }
+            // element is in the right spot
+            if ((leftChildOf(i) >= heap.size() || (heap.get(leftChildOf(i)).compareTo(heap.get(i)) > 0)) && (rightChildOf(i) >= heap.size() || (heap.get(rightChildOf(i)).compareTo(heap.get(i)) > 0))) {
                 break;
             }
-            /* TODO Push element at i down! */
         }
-
-    } /* TODO stop if i is smaller than its children! */
-    
+    }
 
     /**
      * Removes the smallest item from the queue and returns it.
      *
-     * @exception NoSuchElementException
-     *                                   if the queue is empty.
+     * @throws NoSuchElementException if the queue is empty.
      */
     public E dequeue() {
 
-        if (isEmpty())
-            throw new NoSuchElementException("MinPQ is empty");
+        if (isEmpty()) throw new NoSuchElementException("MinPQ is empty");
 
-        /*
-         * TODO Remove minimum element in heap, maintaining both shape and heap
-         * properties
-         */
-        /* HINT: Swap minimum element and last element FIRST! */
-
-        return null;
+        swap(1, heap.size() - 1);
+        E dequeue = heap.remove(heap.size() - 1);
+        pushDown(1);
+        return dequeue;
     }
 
     /*
