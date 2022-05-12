@@ -6,7 +6,7 @@ import java.util.NoSuchElementException;
 public class BCAMinPQ<E extends Comparable<E>> implements BCAQueue<E> {
 
     /* Stores items in heap starting at index 1 */
-    public ArrayList<E> heap = new ArrayList<>();
+    private ArrayList<E> heap = new ArrayList<>();
 
     public BCAMinPQ() {
         /* dummy element in index 0, making actual elements start at index 1 */
@@ -85,29 +85,26 @@ public class BCAMinPQ<E extends Comparable<E>> implements BCAQueue<E> {
      * is the only element out of place.
      */
     private void pushDown(int i) {
-        while (((rightChildOf(i) < heap.size()) || (leftChildOf(i) < heap.size()))) {
-            // left not null right null
-            if ((rightChildOf(i) >= heap.size()) && (heap.get(leftChildOf(i)).compareTo(heap.get(i)) < 0)) {
-                int temp = leftChildOf(i);
+        // while element has at least one child
+        while (((rightChildOf(i) <= size()) || (leftChildOf(i) <= size()))) {
+            // left child exists and right child does not exist
+            if ((rightChildOf(i) > size()) && (heap.get(leftChildOf(i)).compareTo(heap.get(i)) < 0)) {
                 swap(i, leftChildOf(i));
-                i = temp;
+                i = leftChildOf(i);
             }
-            // both not null
+            // both child nodes are not null, compare both of them and swap with the smaller one
             else {
-
-                int temp;
                 if (heap.get(rightChildOf(i)).compareTo(heap.get(leftChildOf(i))) < 0) {
-                    temp = rightChildOf(i);
                     swap(i, rightChildOf(i));
+                    i = rightChildOf(i);
                 } else {
-                    temp = leftChildOf(i);
                     swap(i, leftChildOf(i));
+                    i = leftChildOf(i);
 
                 }
-                i = temp;
             }
-            // element is in the right spot
-            if ((leftChildOf(i) >= heap.size() || (heap.get(leftChildOf(i)).compareTo(heap.get(i)) > 0)) && (rightChildOf(i) >= heap.size() || (heap.get(rightChildOf(i)).compareTo(heap.get(i)) > 0))) {
+            // element is in the right spot, it is less than both its right child and left child, if the two values exist in the first place
+            if ((leftChildOf(i) > size() || (heap.get(leftChildOf(i)).compareTo(heap.get(i)) > 0)) && (rightChildOf(i) > size() || (heap.get(rightChildOf(i)).compareTo(heap.get(i)) > 0))) {
                 break;
             }
         }
